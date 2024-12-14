@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { CurrencyModule } from './multi_currency/currency/currency.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './user/user/user.module';
+import { ExpenseSplitService } from './expense-split/expense-split.service';
 
 
 @Module({
@@ -20,6 +21,6 @@ import { UserModule } from './user/user/user.module';
       
     }) ,CurrencyModule,UserModule],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, ExpenseSplitService],
 })
 export class AppModule {}
