@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { user } from './user.entity';
+import { User } from './user.entity';
 import { Repository } from 'typeorm';
 import { user_Dto } from './user_register_dto.dto';
 import * as jwt from 'jsonwebtoken';
@@ -11,8 +11,8 @@ import { pass_update_Dto } from './pass_update_dto.dto';
 export class UserService {
 
 constructor(
-    @InjectRepository(user)
-private userRepository:Repository<user>
+    @InjectRepository(User)
+private userRepository:Repository<User>
 ){}
 
 

@@ -1,7 +1,8 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Expense } from "src/expense/expense.entity";
+import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('user')
-export class user{
+export class User{
 @PrimaryGeneratedColumn()
 id:number;
 
@@ -25,7 +26,7 @@ monthlyIncome: number;
 @Column({ type: 'decimal', nullable: true }) 
 monthlyExpenses: number;
 
-; @Column({ nullable: true })
+@Column({ nullable: true })
  financialGoals: string;
  @Column({ nullable: true })
   notificationPreferences: string;
@@ -33,5 +34,7 @@ monthlyExpenses: number;
   @Column() 
   privacyPolicyAccepted: boolean;
 
-
+  @ManyToMany(() => Expense, (expense) => expense.participants)
+  expenses: Expense[];
+  
 }

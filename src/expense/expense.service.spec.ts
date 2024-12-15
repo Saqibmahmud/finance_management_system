@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ExpenseSplitService } from './expense-split.service';
+import { ExpenseSplitService } from './expense.service';
 
 describe('ExpenseSplitService', () => {
   let service: ExpenseSplitService;
