@@ -1,11 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Between, Repository } from 'typeorm';
-import { Saving_Investments } from '../categoriesOfSpending/Savings_Investments.entity';
-import { Personal_Spendings } from '../categoriesOfSpending/Personal_Spendings.entity';
-import { Essentials } from '../categoriesOfSpending/Essentials.entity';
-import { Debt_Payments } from '../categoriesOfSpending/Debt_Payments.entity';
+import { Saving_Investments } from '../categoriesOfSpending_Entities/Savings_Investments.entity';
+import { Personal_Spendings } from '../categoriesOfSpending_Entities/Personal_Spendings.entity';
+import { Essentials } from '../categoriesOfSpending_Entities/Essentials.entity';
+import { Debt_Payments } from '../categoriesOfSpending_Entities/Debt_Payments.entity';
 import { spendingDto } from './spending.dto';
+import { Transactions } from 'src/budget-tracking/Transaction.entity';
 
 @Injectable()
 export class CustomAllertService {
@@ -13,34 +14,61 @@ constructor(
     @InjectRepository(Saving_Investments)private readonly savingsRepo:Repository<Saving_Investments>,
 @InjectRepository(Personal_Spendings) private readonly personalRepo:Repository<Personal_Spendings>,
 @InjectRepository(Essentials)private readonly essentialRepo:Repository<Essentials>,
-@InjectRepository(Debt_Payments)private readonly debt_paymentRepo:Repository<Debt_Payments> ){}
+@InjectRepository(Debt_Payments)private readonly debt_paymentRepo:Repository<Debt_Payments>,@InjectRepository(Transactions)private readonly tranRepo:Repository<Transactions> ){}
 
 async createNew_Saving(spendingdto:spendingDto){
     const{Description,ammount,spentDate}= spendingdto;
    const new_exp=    this.savingsRepo.create({Description,ammount,spentDate});
     await   this.savingsRepo.save(new_exp);
+
+    const description=Description ;
+    const type="expense";
+    const now= new Date() ;
+    const transactionDate=now ;
+     const new_tran=this.tranRepo.create({description,ammount,type,transactionDate}) ;
+     this.tranRepo.save(new_tran) ;
        return "New Spending added to Saving and Investments" ;
 }
 
 async createNew_PersonalS(spendingdto:spendingDto){
     const{Description,ammount,spentDate}= spendingdto;
-   const new_exp= this.savingsRepo.create({Description,ammount,spentDate});
+   const new_exp= this.personalRepo.create({Description,ammount,spentDate});
    await   this.personalRepo.save(new_exp);
+
+   const description=Description ;
+   const type="expense";
+   const now= new Date() ;
+   const transactionDate=now ;
+    const new_tran=this.tranRepo.create({description,ammount,type,transactionDate}) ;
+    this.tranRepo.save(new_tran) ;
     return "New Spending added to Personal Costs" ;
 }
 
 async createNew_Essential(spendingdto:spendingDto){
     const{Description,ammount,spentDate}= spendingdto;
-   const new_exp= this.savingsRepo.create({Description,ammount,spentDate});
+   const new_exp= this.essentialRepo.create({Description,ammount,spentDate});
    await   this.essentialRepo.save(new_exp);
+   const description=Description ;
+   const type="expense";
+   const now= new Date() ;
+   const transactionDate=now ;
+    const new_tran=this.tranRepo.create({description,ammount,type,transactionDate}) ;
+    this.tranRepo.save(new_tran) ;
     return "New Spending added to Essential Costs" ;
 }
 
 
 async createNew_Debt_pay(spendingdto:spendingDto){
     const{Description,ammount,spentDate}= spendingdto;
-  const new_exp=  this.savingsRepo.create({Description,ammount,spentDate});
+  const new_exp=  this.debt_paymentRepo.create({Description,ammount,spentDate});
   await   this.debt_paymentRepo.save(new_exp);
+
+  const description=Description ;
+  const type="expense";
+  const now= new Date() ;
+  const transactionDate=now ;
+   const new_tran=this.tranRepo.create({description,ammount,type,transactionDate}) ;
+   this.tranRepo.save(new_tran) ;
     return "New Spending added to pay Debts for later" ;
 
 }
@@ -132,6 +160,9 @@ else if(category==="debt_payments"){
             
             }
             return `MonthlyLimit of ${category} updated to ${newLimit}TK` ;
+            }
+            else{
+                throw new HttpException("category not found",HttpStatus.BAD_REQUEST) ;
             }
 
 

@@ -42,6 +42,7 @@ getEssentialAllert(){
 
 }
 
+
 // cattegories can only bellow
 // 1. savings_investments
 // 2.essentials_spents

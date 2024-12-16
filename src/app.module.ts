@@ -8,6 +8,7 @@ import { ExpenseSplitModule } from './expense/expense.module';
 import { DebtModule } from './debt/debt.module';
 import { CustomAllertModule } from './custom-allert/custom-allert.module';
 import { BudgetTrackingModule } from './budget-tracking/budget-tracking.module';
+import { AnalyseSpendingModule } from './analyse-spending/analyse-spending.module';
 
 
 @Module({
@@ -22,7 +23,7 @@ import { BudgetTrackingModule } from './budget-tracking/budget-tracking.module';
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
       
-    }) ,CurrencyModule,UserModule,ExpenseSplitModule, DebtModule, CustomAllertModule, BudgetTrackingModule],
+    }) ,CurrencyModule,UserModule,ExpenseSplitModule, DebtModule, CustomAllertModule, BudgetTrackingModule, AnalyseSpendingModule],
   controllers: [AppController ],
   providers: [AppService],
 })
