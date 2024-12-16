@@ -18,7 +18,7 @@ async addDebt(debt_dto:debtDto){
 }
 
 //check and nnotify
-@Cron('30 22 * * *') //raat 12 tay  runn  korbe code  auto  from nestjs@schedule
+@Cron('0 0 * * *') //raat 12 tay  runn  korbe code  auto  from nestjs@schedule
 async getNotified(){
 
  let today= new  Date   ;
