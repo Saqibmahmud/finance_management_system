@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Between, Repository } from 'typeorm';
-import { Saving_Investments } from './categoriesOfSpending/Savings_Investments.entity';
-import { Personal_Spendings } from './categoriesOfSpending/Personal_Spendings.entity';
-import { Essentials } from './categoriesOfSpending/Essentials.entity';
-import { Debt_Payments } from './categoriesOfSpending/Debt_Payments.entity';
+import { Saving_Investments } from '../categoriesOfSpending/Savings_Investments.entity';
+import { Personal_Spendings } from '../categoriesOfSpending/Personal_Spendings.entity';
+import { Essentials } from '../categoriesOfSpending/Essentials.entity';
+import { Debt_Payments } from '../categoriesOfSpending/Debt_Payments.entity';
 import { spendingDto } from './spending.dto';
 
 @Injectable()

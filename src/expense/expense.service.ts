@@ -1,20 +1,21 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/user/user/user.entity';
-import { In, Repository } from 'typeorm';
+import { In, Repository, Transaction } from 'typeorm';
 import { Expense } from './expense.entity';
 import { expenseDto } from './expense_dto.dto';
 import { expense_participants_user } from './expense_participants_user.entity';
+import { Transactions } from 'src/budget-tracking/Transaction.entity';
 
 @Injectable()
 export class ExpenseSplitService {
 
 
 constructor(@InjectRepository(User)private  readonly userRepo:Repository<User> ,
-@InjectRepository(Expense)private readonly expenseRepo:Repository<Expense>,@InjectRepository(expense_participants_user) private readonly expesne_userRepo:Repository<expense_participants_user>
-) {}
+@InjectRepository(Expense)private readonly expenseRepo:Repository<Expense>,@InjectRepository(expense_participants_user) private readonly expesne_userRepo:Repository<expense_participants_user>,
+@InjectRepository(Transactions)private readonly transacRepo:Repository<Transactions>) {}
 
-async addBill(expense_dto:expenseDto){
+async addBill(expense_dto:expenseDto){ 
 const { description, totalAmmount, shares, participants } = expense_dto;
 let now=new Date();
 const createdDate= now ;
@@ -25,9 +26,11 @@ if ( users.length===0){
 const newBill= this.expenseRepo.create({description,totalAmmount,createdDate,shares,participants:users});
 
 await this.expenseRepo.save(newBill) ;
-
-
-
+const type="expense";
+const transactionDate= now ;
+let ammount=totalAmmount;
+const newtransac= this.transacRepo.create({description,ammount,type,transactionDate});
+this.transacRepo.save(newtransac) ;
 }
 
 
