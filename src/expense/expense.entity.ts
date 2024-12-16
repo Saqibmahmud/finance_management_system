@@ -20,6 +20,8 @@ createdDate:Date ;
 @JoinTable()
 participants:User[];
 
+
+
 @Column('simple-json')
 shares:{[user_name:string]:number} ;
 

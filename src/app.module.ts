@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './user/user/user.module';
 import { ExpenseSplitModule } from './expense/expense.module';
 import { DebtModule } from './debt/debt.module';
+import { CustomAllertModule } from './custom-allert/custom-allert.module';
 
 
 @Module({
@@ -20,7 +21,7 @@ import { DebtModule } from './debt/debt.module';
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
       
-    }) ,CurrencyModule,UserModule,ExpenseSplitModule, DebtModule],
+    }) ,CurrencyModule,UserModule,ExpenseSplitModule, DebtModule, CustomAllertModule],
   controllers: [AppController ],
   providers: [AppService],
 })
