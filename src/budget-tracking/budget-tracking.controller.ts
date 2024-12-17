@@ -1,6 +1,7 @@
-import { Body, Controller, Get, Post, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards, ValidationPipe } from '@nestjs/common';
 import { BudgetTrackingService } from './budget-tracking.service';
 import { spendingDto } from 'src/custom-allert/spending.dto';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('budget-tracking')
 export class BudgetTrackingController {
@@ -37,11 +38,12 @@ constructor(private readonly budgetTrackingService:BudgetTrackingService){}
         return this.budgetTrackingService.createNewIncome(spendingdto);    
     
     }
+    @UseGuards(AuthGuard('jwt'))
     @Get('allTransactions')
     getAlltransactions(){
         return this.budgetTrackingService.getAlltransactions() ;
     }
-
+    @UseGuards(AuthGuard('jwt'))
     @Get('totalValues')
     getTotalValues(){
         return this.budgetTrackingService.getTotalTransaction() ;

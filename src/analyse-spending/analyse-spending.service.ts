@@ -26,7 +26,7 @@ if(category==="savings_investments"){
     for(const res of results){
 total_sp=total_sp+Number(res.ammount) ;
 
-    }
+}
 
 
 return{

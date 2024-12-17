@@ -10,6 +10,7 @@ import { CustomAllertModule } from './custom-allert/custom-allert.module';
 import { BudgetTrackingModule } from './budget-tracking/budget-tracking.module';
 import { AnalyseSpendingModule } from './analyse-spending/analyse-spending.module';
 import { BillReminderModule } from './bill-reminder/bill-reminder.module';
+import { AuthModule } from './auth/auth.module';
 
 
 @Module({
@@ -24,7 +25,7 @@ import { BillReminderModule } from './bill-reminder/bill-reminder.module';
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
       
-    }) ,CurrencyModule,UserModule,ExpenseSplitModule, DebtModule, CustomAllertModule, BudgetTrackingModule, AnalyseSpendingModule, BillReminderModule],
+    }) ,CurrencyModule,UserModule,ExpenseSplitModule, DebtModule, CustomAllertModule, BudgetTrackingModule, AnalyseSpendingModule, BillReminderModule,AuthModule],
   controllers: [AppController ],
   providers: [AppService],
 })

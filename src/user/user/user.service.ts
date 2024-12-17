@@ -50,13 +50,14 @@ async login (user_login_dto:user_login_Dto){
         throw new HttpException("Invalid credentials",HttpStatus.UNAUTHORIZED);
        
     } else{
- console.log(exist_user);
+//  console.log(exist_user);
    const userId= exist_user.id;
    const  token =jwt.sign({userId},'secretkey');
-    console.log(token);
+    // console.log(token);
     return token ;
     }
 }
+
 
 // pore change korte hobe at final project! tokhon token ke decypher kore then authguard class diye korte hobe
 async update_password(pass_update_dto:pass_update_Dto){
