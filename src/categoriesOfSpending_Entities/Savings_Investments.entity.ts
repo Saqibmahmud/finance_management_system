@@ -17,6 +17,8 @@ spentDate:Date;
 @Column({default:10000})
 monthlyLimit:number ;
 
+@Column({nullable:true})
+userId:number ;
 
 
 }

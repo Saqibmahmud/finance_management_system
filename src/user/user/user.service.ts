@@ -54,7 +54,9 @@ async login (user_login_dto:user_login_Dto){
    const userId= exist_user.id;
    const  token =jwt.sign({userId},'secretkey');
     // console.log(token);
-    return token ;
+    return {message:"Lofin Succesfull",token} ;
+
+    
     }
 }
 

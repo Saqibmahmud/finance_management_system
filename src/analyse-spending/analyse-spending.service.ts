@@ -19,9 +19,9 @@ constructor( @InjectRepository(Saving_Investments)private readonly savingsRepo:R
 // 2.essentials_spents
 // 3.personal_spents
 // 4.debt_payments
-async analyse_spendings(category:string){
+async analyse_spendings(category:string,userid:number){
 if(category==="savings_investments"){
-    const results= await this.savingsRepo.find() ;
+    const results= await this.savingsRepo.find({where:{userId:userid}}) ;
    let total_sp=0 ;
     for(const res of results){
 total_sp=total_sp+Number(res.ammount) ;
@@ -35,7 +35,7 @@ return{
 }
 }
 else if(category==="essentials_spents"){
-    const results= await this.essentialRepo.find() ;
+    const results= await this.essentialRepo.find({where:{userId:userid}}) ;
    let total_sp=0 ;
     for(const res of results){
 total_sp=total_sp+Number(res.ammount) ;
@@ -51,7 +51,7 @@ return{
 
 
 else if(category==="personal_spents"){
-    const results= await this.personalRepo.find() ;
+    const results= await this.personalRepo.find({where:{userId:userid}}) ;
    let total_sp=0 ;
     for(const res of results){
 total_sp=total_sp+Number(res.ammount) ;
@@ -65,7 +65,7 @@ return{
 
 }
 else if(category==="debt_payments"){
-    const results= await this.debt_paymentRepo.find() ;
+    const results= await this.debt_paymentRepo.find({where:{userId:userid}}) ;
    let total_sp=0 ;
     for(const res of results){
 total_sp=total_sp+Number(res.ammount) ;

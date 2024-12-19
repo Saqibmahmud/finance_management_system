@@ -17,7 +17,7 @@ constructor(@InjectRepository(Currency) private currencyrepository:Repository<Cu
 async Update_exchange_rates( /*currency_dto:currencyDto*/){
     const apiUrl='https://api.exchangerate-api.com/v4/latest/USD';
 try{
-    const response=  axios.get(apiUrl) ; //extraxt korahocceh data from api
+    const response=  axios.get(apiUrl) ; //extraxt kore data from api
    const rates=(await response).data.rates ;
    const now= new Date();
 //  let {code}=currency_dto;

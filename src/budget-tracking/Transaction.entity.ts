@@ -16,5 +16,7 @@ type:string ; //income/expense
 @Column()
 transactionDate:Date;
 
+@Column({nullable:true})
+userId:number ;
 
 }

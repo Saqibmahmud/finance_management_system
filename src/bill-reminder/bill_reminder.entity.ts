@@ -20,4 +20,7 @@ export class bills_reminder {
 
   @Column({ default: true })
   active: boolean;
+
+  @Column({nullable:true})
+  userId:number ;
 }

@@ -1,7 +1,8 @@
-import { Body, Controller, Param, Post, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Param, Post, UseGuards, ValidationPipe } from '@nestjs/common';
 import { CurrencyService } from './currency.service';
 import { convert_currencyDto } from '../currency_convert_dto.dto';
-
+import { AuthGuard } from '@nestjs/passport';
+@UseGuards(AuthGuard('jwt'))
 @Controller('currency')
 export class CurrencyController {
 

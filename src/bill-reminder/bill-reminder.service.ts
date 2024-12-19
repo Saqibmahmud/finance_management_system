@@ -14,32 +14,33 @@ export class BillReminderService {
       ) {}
 
 
-      async addBill(billDto: BillDto) {
+      async addBill(billDto: BillDto,userId:number) {
         const{billName,amount}=billDto ;
         const bill = this.billRepository.create({
           billName,amount,
           dueDate: new Date(billDto.dueDate),
-          notificationSent: false,
+          notificationSent: false,userId
         });
         await this.billRepository.save(bill);
         return 'Bill added successfully';
       }
-      async getAllBills() {
-        return this.billRepository.find({ where: { active: true } });
+      async getAllBills(userid:number) {
+        return this.billRepository.find({ where: {userId:userid, active: true } });
       }
 
-      async deleteBill(id: number): Promise<string> {
+      async deleteBill(id: number) {
         const result = await this.billRepository.update(id, { active: false });
         if (result.affected === 0) {
           throw new HttpException('Bill not found', HttpStatus.NOT_FOUND);
         }
         return 'Bill deleted successfully';
       }
-      @Cron('0 0 ') // Run daily at 12:00 AM
-      async checkAndNotify() {
+      @Cron('0 0 * * *') // Run daily at 12:00 AM
+      async checkAndNotify(userid:number) {
         const today = new Date();
         const upcomingBills = await this.billRepository.find({
           where: {
+            userId:userid,
             notificationSent: false,
             dueDate: Between(
               new Date(today.getFullYear(), today.getMonth(), today.getDate() ),

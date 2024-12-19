@@ -16,21 +16,20 @@ constructor(
 @InjectRepository(Essentials)private readonly essentialRepo:Repository<Essentials>,
 @InjectRepository(Debt_Payments)private readonly debt_paymentRepo:Repository<Debt_Payments>,@InjectRepository(Transactions)private readonly tranRepo:Repository<Transactions> ){}
 
-async createNew_Saving(spendingdto:spendingDto){
+
+async createNew_Saving(spendingdto:spendingDto,userid:number){
     const{Description,ammount,spentDate}= spendingdto;
    const new_exp=    this.savingsRepo.create({Description,ammount,spentDate});
     await   this.savingsRepo.save(new_exp);
-
-    const description=Description ;
-    const type="expense";
-    const now= new Date() ;
-    const transactionDate=now ;
-     const new_tran=this.tranRepo.create({description,ammount,type,transactionDate}) ;
-     this.tranRepo.save(new_tran) ;
-       return "New Spending added to Saving and Investments" ;
+   const description=Description ;
+   const type="expense";
+   const now= new Date() ;
+   const transactionDate=now ;
+    const new_tran=this.tranRepo.create({description,ammount,type,transactionDate}) ;
+    this.tranRepo.save(new_tran) ;
+     return "New Spending added to Saving and Investments" ;
 }
-
-async createNew_PersonalS(spendingdto:spendingDto){
+async createNew_PersonalSpending(spendingdto:spendingDto,userid:number){
     const{Description,ammount,spentDate}= spendingdto;
    const new_exp= this.personalRepo.create({Description,ammount,spentDate});
    await   this.personalRepo.save(new_exp);
@@ -44,41 +43,43 @@ async createNew_PersonalS(spendingdto:spendingDto){
     return "New Spending added to Personal Costs" ;
 }
 
-async createNew_Essential(spendingdto:spendingDto){
+async createNew_Essential(spendingdto:spendingDto,userid:number){
     const{Description,ammount,spentDate}= spendingdto;
    const new_exp= this.essentialRepo.create({Description,ammount,spentDate});
    await   this.essentialRepo.save(new_exp);
+
    const description=Description ;
    const type="expense";
    const now= new Date() ;
    const transactionDate=now ;
     const new_tran=this.tranRepo.create({description,ammount,type,transactionDate}) ;
     this.tranRepo.save(new_tran) ;
+    
     return "New Spending added to Essential Costs" ;
 }
 
 
-async createNew_Debt_pay(spendingdto:spendingDto){
+async createNew_Debt_pay(spendingdto:spendingDto,userid:number){
     const{Description,ammount,spentDate}= spendingdto;
   const new_exp=  this.debt_paymentRepo.create({Description,ammount,spentDate});
   await   this.debt_paymentRepo.save(new_exp);
 
   const description=Description ;
-  const type="expense";
-  const now= new Date() ;
-  const transactionDate=now ;
-   const new_tran=this.tranRepo.create({description,ammount,type,transactionDate}) ;
-   this.tranRepo.save(new_tran) ;
+   const type="expense";
+   const now= new Date() ;
+   const transactionDate=now ;
+    const new_tran=this.tranRepo.create({description,ammount,type,transactionDate}) ;
+    this.tranRepo.save(new_tran) ;
+  
     return "New Spending added to pay Debts for later" ;
 
 }
-
-async allert_savings(){
+async allert_savings(userid:number){
    const   today= new Date();
    const startOfMonth=new Date(today.getFullYear(),today.getMonth(),1) ;
    const endOfMonth= new Date(today.getFullYear(),today.getMonth()+1,0) ;
 
-   const expenses= await this.savingsRepo.find({where:{spentDate:Between(startOfMonth,endOfMonth)}}) ;
+   const expenses= await this.savingsRepo.find({where:{userId:userid,spentDate:Between(startOfMonth,endOfMonth)}}) ;
    let totalspending=0 ;
    for(const exp of expenses){
          totalspending=totalspending+exp.ammount ;}
@@ -93,12 +94,12 @@ else{
    
 
 
-   async allert_essentials(){
+   async allert_essentials(userid:number){
     const   today= new Date();
     const startOfMonth=new Date(today.getFullYear(),today.getMonth(),1) ;
     const endOfMonth= new Date(today.getFullYear(),today.getMonth()+1,0) ;
  
-    const expenses= await this.essentialRepo.find({where:{spentDate:Between(startOfMonth,endOfMonth)}}) ;
+    const expenses= await this.essentialRepo.find({where:{userId:userid,spentDate:Between(startOfMonth,endOfMonth)}}) ;
     let totalspending=0 ;
     for(const exp of expenses){
           totalspending=totalspending+exp.ammount ;}
@@ -110,14 +111,35 @@ else{
  }
  
     }
+
+
+
+
+    async allert_PersonalSpending(userid:number){
+        const   today= new Date();
+        const startOfMonth=new Date(today.getFullYear(),today.getMonth(),1) ;
+        const endOfMonth= new Date(today.getFullYear(),today.getMonth()+1,0) ;
+     
+        const expenses= await this.personalRepo.find({where:{userId:userid,spentDate:Between(startOfMonth,endOfMonth)}}) ;
+        let totalspending=0 ;
+        for(const exp of expenses){
+              totalspending=totalspending+exp.ammount ;}
+     if(totalspending >= expenses[0].monthlyLimit){
+         return"Your Limit of Personal spendings is over the limit" ;
+     }
+     else{
+         return "You  are bellow the limit";
+     }
+     
+        }
     
 
 
-async change_limit(newLimit:number,category:string){
+async change_limit(newLimit:number,category:string,userid:number){
 
 if(category==="savings_investments"){
 
-const results=await this.savingsRepo.find();
+const results=await this.savingsRepo.find({where:{userId:userid}});
 for(const res of results){
 
 res.monthlyLimit=newLimit ;
@@ -129,7 +151,7 @@ return `MonthlyLimit of ${category} updated to ${newLimit}Tk` ;
 }
 else if(category==="essentials_spents"){
 
-    const results=await this.essentialRepo.find();
+    const results=await this.essentialRepo.find({where:{userId:userid}});
     for(const res of results){
     
     res.monthlyLimit=newLimit ;
@@ -141,7 +163,7 @@ else if(category==="essentials_spents"){
 
 else if(category==="personal_spents"){
 
-        const results=await this.personalRepo.find();
+        const results=await this.personalRepo.find({where:{userId:userid}});
         for(const res of results){
         
         res.monthlyLimit=newLimit ;
@@ -152,7 +174,7 @@ else if(category==="personal_spents"){
         }
 else if(category==="debt_payments"){
 
-            const results=await this.debt_paymentRepo.find();
+            const results=await this.debt_paymentRepo.find({where:{userId:userid}});
             for(const res of results){
             
             res.monthlyLimit=newLimit ;

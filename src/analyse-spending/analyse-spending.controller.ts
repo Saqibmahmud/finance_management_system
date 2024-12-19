@@ -1,4 +1,4 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param ,Request} from '@nestjs/common';
 import { AnalyseSpendingService } from './analyse-spending.service';
 
 @Controller('analyse-spending')
@@ -11,8 +11,9 @@ constructor(private readonly analysespendingService:AnalyseSpendingService){}
 // 3.personal_spents
 // 4.debt_payments
 @Get(':category')
-analyse(@Param('category')category:string){
-   return this.analysespendingService.analyse_spendings(category) ;
+analyse(@Param('category')category:string,@Request() req){
+   const userId=req.user.userId ;
+   return this.analysespendingService.analyse_spendings(category,userId) ;
 
 
 }
