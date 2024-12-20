@@ -36,5 +36,8 @@ monthlyExpenses: number;
 
   @ManyToMany(() => Expense, (expense) => expense.participants)
   expenses: Expense[];
+
+  @Column({ nullable: true })
+  otp: string;
   
 }

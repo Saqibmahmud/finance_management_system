@@ -1,7 +1,8 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post ,Request} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post ,Request, UseGuards} from '@nestjs/common';
 import { BillReminderService } from './bill-reminder.service';
 import { BillDto } from './bill_reminder.dto';
-
+import { AuthGuard } from '@nestjs/passport';
+@UseGuards(AuthGuard('jwt'))
 @Controller('bill-reminder')
 export class BillReminderController {
 

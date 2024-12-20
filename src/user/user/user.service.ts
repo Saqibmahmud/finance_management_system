@@ -6,13 +6,14 @@ import { user_Dto } from './user_register_dto.dto';
 import * as jwt from 'jsonwebtoken';
 import { user_login_Dto } from './user_login_dto.dto';
 import { pass_update_Dto } from './pass_update_dto.dto';
+import { MailService } from 'src/Mail/mail.service';
 
 @Injectable()
 export class UserService {
 
 constructor(
     @InjectRepository(User)
-private userRepository:Repository<User>
+private userRepository:Repository<User>, private mailerService:MailService
 ){}
 
 
@@ -60,22 +61,45 @@ async login (user_login_dto:user_login_Dto){
     }
 }
 
-
-// pore change korte hobe at final project! tokhon token ke decypher kore then authguard class diye korte hobe
-async update_password(pass_update_dto:pass_update_Dto){
-    
-    const{username}=pass_update_dto ;
-    const{password}=pass_update_dto;
-    const{updated_password}=pass_update_dto ;
-    const exist_user=await this.userRepository.findOne({ where: {username:username}}) ;
+//sendotp
+async otp_gennerate(userid:number){
+    const exist_user=await this.userRepository.findOne({ where: {id:userid}}) ;
     if (!exist_user){
         throw new HttpException("Invalid credentials",HttpStatus.UNAUTHORIZED);
     }
     else{
+        const otp=Math.floor(1000 + Math.random() * 9000).toString();
+        exist_user.otp=otp ;
+        await this.userRepository.save(exist_user) ;
+        this.mailerService.sendOtp(exist_user.email,otp) ;
+        return "OTP sent to your email" ;
+    }
+
+}
+
+
+// passupdate with otp
+async update_password(pass_update_dto:pass_update_Dto,userId:number){
+    
+   
+    const{updated_password,email,OTP}=pass_update_dto ;
+   
+    const exist_user=await this.userRepository.findOne({ where: {id:userId,email:email}}) ;
+    if (!exist_user){
+        throw new HttpException("Invalid credentials",HttpStatus.UNAUTHORIZED);
+    }
+    else{
+        this.otp_gennerate(userId) ;
+        
+        if(OTP!=exist_user.otp){
+            throw new HttpException("Invalid OTP",HttpStatus.UNAUTHORIZED);
+        }
+        else{
         exist_user.password=updated_password ;
        await  this.userRepository.save(exist_user) ;
        return exist_user ;
-
+            
+    }
     }
 
     
@@ -93,6 +117,7 @@ async deleteUser(userId: number)
 
 
         }
+
 
 
 

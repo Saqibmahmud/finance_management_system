@@ -11,6 +11,8 @@ import { BudgetTrackingModule } from './budget-tracking/budget-tracking.module';
 import { AnalyseSpendingModule } from './analyse-spending/analyse-spending.module';
 import { BillReminderModule } from './bill-reminder/bill-reminder.module';
 import { AuthModule } from './auth/auth.module';
+import { MailerModule } from '@nestjs-modules/mailer';
+import { MailModule } from './Mail/mail.module';
 
 
 @Module({
@@ -25,7 +27,7 @@ import { AuthModule } from './auth/auth.module';
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
       
-    }) ,CurrencyModule,UserModule,ExpenseSplitModule, DebtModule, CustomAllertModule, BudgetTrackingModule, AnalyseSpendingModule, BillReminderModule,AuthModule],
+    }) ,CurrencyModule,UserModule,ExpenseSplitModule, DebtModule, CustomAllertModule, BudgetTrackingModule, AnalyseSpendingModule, BillReminderModule,AuthModule,MailModule],
   controllers: [AppController ],
   providers: [AppService],
 })

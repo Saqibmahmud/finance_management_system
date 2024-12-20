@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, HttpException, HttpStatus, Param, ParseIntPipe, Patch, Post, UseGuards, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, ParseIntPipe, Patch, Post, Request, UseGuards, ValidationPipe } from '@nestjs/common';
 import { UserService } from './user.service';
 import { user_Dto } from './user_register_dto.dto';
 import { user_login_Dto } from './user_login_dto.dto';
@@ -22,12 +22,23 @@ return await this.userService.login(user_login_dto);
 }
 
 @UseGuards(AuthGuard('jwt'))
-@Patch('updatePass')
-Updatepass(@Body(ValidationPipe)pass_update_dto:pass_update_Dto){
-    return  this.userService.update_password(pass_update_dto);
-
+@Get('get_otp')
+async sendOTP(pass_update_dto:pass_update_Dto,@Request() req){
+    const userId=req.user.userId ;
+    return await this.userService.otp_gennerate(userId);
 }
 
+
+
+
+@UseGuards(AuthGuard('jwt'))
+@Patch('updatePass')
+Updatepass(@Body(ValidationPipe)pass_update_dto:pass_update_Dto,@Request() req){
+    const userId=req.user.userId ;
+    return  this.userService.update_password(pass_update_dto,userId);
+
+}
+@UseGuards(AuthGuard('jwt'))
 @Delete('/delete/:id') 
 async deleteUser(@Param('id', ParseIntPipe) id: number)
  { try { return await this.userService.deleteUser(id); }

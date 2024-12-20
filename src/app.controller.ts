@@ -17,6 +17,9 @@ import { AuthGuard } from '@nestjs/passport';
 //localhost:3000/api/protected e gale messege return korbe and user er id return korbe 
 @Controller('api')
 export class AppController {
+  getHello(): any {
+    throw new Error('Method not implemented.');
+  }
   constructor(private readonly appService: AppService) {}
    @UseGuards(AuthGuard('jwt'))
 

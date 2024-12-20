@@ -11,6 +11,7 @@ constructor(private readonly budgetTrackingService:BudgetTrackingService){}
 
     @Post('savings-investments')
     createSavings(@Body(ValidationPipe)spendingdto:spendingDto,@Request() req){
+        
         const userId=req.user.userId ;
         return this.budgetTrackingService.createNew_Saving(spendingdto,userId);    
     

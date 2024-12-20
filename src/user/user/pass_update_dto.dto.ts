@@ -4,14 +4,13 @@ export class pass_update_Dto{
 
     @IsNotEmpty() 
     @IsString()
-    readonly username:string ;
-    
-    
+    email:string ;
+ 
     @IsNotEmpty() 
     @IsString()
-    readonly password:string ;
+     updated_password:string ;
 
-    @IsNotEmpty() 
+    @IsNotEmpty()
     @IsString()
-    readonly updated_password:string ;
+    OTP:string  ;
 }
